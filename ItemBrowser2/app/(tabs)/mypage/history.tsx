@@ -2,10 +2,10 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { AntDesign } from '@expo/vector-icons'; 
 
-export default function Search() {
+export default function History() {
   return (
     <View style={styles.container}>
-      <Text>検索画面</Text>
+      <Text>Open up App.tsx to start working on your app!</Text>
       <StatusBar style="auto" />
     </View>
   );
