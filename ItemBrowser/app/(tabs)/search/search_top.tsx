@@ -1,28 +1,28 @@
 import { Ionicons } from '@expo/vector-icons';
-import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import SearchImageCategoryBig  from '../../../components/ImageViews/search_imageCategoryBig';
-import SearchImageCategoryH2  from '../../../components/ImageViews/search_imageCategoryH2';
+import SearchImageCategoryBig from '../../../components/ImageViews/search_imageCategoryBig';
+import SearchImageCategoryH2 from '../../../components/ImageViews/search_imageCategoryH2';
+import SearchWindow from '../../search_window';
 import AllData from '../../../data/all_data';
+import { router } from 'expo-router';
 
 export default function SearchTop() {
 
-  const selectedItems = ['Item1', 'Item3', 'Item5', 'Item7'];
+  const selectedItems = ['Pors Nuel', 'Eduard Classic', 'Sif Prains', 'Soln Rose'];
   const filteredData = AllData.filter(item => selectedItems.includes(item.name));
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.inputContainer}>
+      <TouchableOpacity style={styles.inputContainer} onPress={() => router.push('/search_window')}>
         <Ionicons name="search" size={24} color="gray" style={styles.icon} />
-        <TextInput
-          style={styles.input}
-          placeholder="すべての商品から探す"
-          // ここにonChangeTextやその他のプロパティを追加
-        />
-      </View>
-        <SearchImageCategoryBig data={filteredData[0]} text="Category1" />
-        <SearchImageCategoryBig data={filteredData[1]} text="Category2" />
-        <SearchImageCategoryH2 data1={filteredData[2]} data2={filteredData[3]} text1="Category3" text2="Category4"/>
+        <View style={styles.input}>
+          <Text>すべての商品から探す</Text>
+        </View>
+      </TouchableOpacity>
+        <SearchImageCategoryBig data={filteredData[0]} text="オードパルファム" />
+        <SearchImageCategoryBig data={filteredData[1]} text="オードトワレ" />
+        <SearchImageCategoryH2 data1={filteredData[2]} data2={filteredData[3]} text1="オーデコロン" text2="パルファム"/>
     </ScrollView>
   );
 }

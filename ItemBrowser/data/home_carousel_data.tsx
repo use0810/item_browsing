@@ -8,14 +8,14 @@ export interface DataType {
   image: ImageSourcePropType;
 }
 
-const filterNames = ["Item1", "Item2","Item3","Item4","Item5"]; // 抽出したいnameのリスト
+const filterNames = ["Pors Nuel", "Soln Rose","Percume Sifline","Eduard Classic","Sif Prains"]; // 抽出したいnameのリスト
 
 const urlMapping: { [key: string]: string } = {
-  "Item1": "search/item1",
-  "Item2": "search/item2",
-  "Item3": "search/item3",
-  "Item4": "search/item4",
-  "Item5": "search/item5",
+  "Pors Nuel": "search/Pors Nuel",
+  "Soln Rose": "search/Soln Rose",
+  "Percume Sifline": "search/Percume Sifline",
+  "Eduard Classic": "search/Eduard Classic",
+  "Sif Prains": "search/Sif Prains",
 };
 
 const  HomeCarouselData: DataType[] = AllData

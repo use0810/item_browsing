@@ -2,25 +2,28 @@ import { Ionicons } from '@expo/vector-icons';
 
 import CustomCarousel from '../../components/carousel/custom_carousel';
 import HomeImagesH2V2 from '../../components/ImageViews/home_imagesH2V2';
-import { ScrollView, Text, TextInput, View, StyleSheet } from 'react-native';
+
+import HomeCarouselData, { DataType } from '../../data/home_carousel_data';
+import { ScrollView, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { router } from 'expo-router';
 
 
 export default function HomeTab1() {
-  
+  const CarouselData: DataType[] = HomeCarouselData;
+
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.inputContainer}>
+      <TouchableOpacity style={styles.inputContainer} onPress={() => router.push('../search_window')}>
         <Ionicons name="search" size={24} color="gray" style={styles.icon} />
-        <TextInput
-          style={styles.input}
-          placeholder="すべての商品から探す"
-        />
-      </View>
+        <View style={styles.input}>
+          <Text>すべての商品から探す</Text>
+        </View>
+      </TouchableOpacity>
       {/* <Text style={[styles.text, { fontFamily: 'jsMathCmbx10' }]}> */}
       <Text style={styles.text}>
           New
       </Text>
-      <CustomCarousel />
+      <CustomCarousel data={CarouselData}/>
        {/* <Text style={[styles.text, { fontFamily: 'jsMathCmbx10' }]}> */}
        <Text style={styles.text}>
           Season

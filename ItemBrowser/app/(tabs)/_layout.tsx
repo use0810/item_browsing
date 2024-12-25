@@ -14,6 +14,7 @@ const TabLayout = ( ) => {
       screenOptions={{
         tabBarActiveTintColor: 'green',
         tabBarLabelPosition: 'below-icon',
+        tabBarStyle: { width: '100%' }
       }}
     >
       <Tabs.Screen 
@@ -74,7 +75,7 @@ const TabLayout = ( ) => {
         }} 
       />
       <Tabs.Screen
-        name="mypage/user" 
+        name="mypage" 
         options={{ 
           title: 'マイページ',
           tabBarIcon: ({ color, focused }: { color: string; focused: boolean }) => (
@@ -84,13 +85,6 @@ const TabLayout = ( ) => {
               size={24}
             />
           ),
-        }} 
-      />
-      <Tabs.Screen
-        name="mypage/history" 
-        options={{ 
-          title: 'マイページ', 
-          tabBarButton: () => null
         }} 
       />
     </Tabs>

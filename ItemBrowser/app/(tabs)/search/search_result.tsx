@@ -1,6 +1,6 @@
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import UserFavoriteButtonWrapper from '../../../components/userDataManager/userFavoriteWrapper';
 import AllData, { DataType } from '../../../data/all_data';
@@ -21,13 +21,23 @@ export default function SearchResult() {
     rows.push(filteredData.slice(i, i + 2));
   }
 
+  const handlePress = (item: DataType) => {
+    // detail.tsx にデータを渡して遷移
+    router.push({
+      pathname: '/search_detail', // detail.tsx のパス
+      params: {
+        data: JSON.stringify(item), // オブジェクトを文字列に変換
+      },
+    });
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView>
         {rows.map((row, rowIndex) => (
           <View key={rowIndex} style={styles.row}>
             {row.map(item => (
-              <View key={item.name} style={styles.contents}>
+              <TouchableOpacity onPress={() => handlePress(item)} key={item.name} style={styles.contents}>
                 <Image source={item.image} style={styles.image} />
                 <View style={styles.textContainer}>
                   <Text>
@@ -35,7 +45,7 @@ export default function SearchResult() {
                   </Text>
                   <UserFavoriteButtonWrapper itemId={item.id} />
                 </View>
-              </View>
+              </TouchableOpacity>
             ))}
           </View>
         ))}

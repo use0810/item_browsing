@@ -8,13 +8,13 @@ export interface DataType {
   image: ImageSourcePropType;
 }
 
-const filterNames = ["Item1", "Item2", "Item3", "Item4"]; // 抽出したいnameのリスト
+const filterNames = ["Golden Maple", "Pumpkin Elegance", "Autumn Bloom", "Scarlet Ribbon"]; // 抽出したいnameのリスト
 
 const urlMapping: { [key: string]: string } = {
-  "Item1": "search/item1",
-  "Item2": "search/item2",
-  "Item3": "search/item3",
-  "Item4": "search/item4",
+  "Golden Maple": "search/Golden Maple",
+  "Pumpkin Elegance": "search/Pumpkin Elegance",
+  "Autumn Bloom": "search/Autumn Bloom",
+  "Scarlet Ribbon": "search/Scarlet Ribbon",
 };
 
 const HomeImagesH2V2Data: DataType[] = AllData

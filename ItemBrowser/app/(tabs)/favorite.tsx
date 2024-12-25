@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between', // アイテム間に均等にスペースを確保
     padding: 10,
     borderBottomWidth: 1,
+    flexGrow: 1
   },
   item: {
       width: '48%', // 2つ横並びにするために幅を50%未満に設定
@@ -49,7 +50,6 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
       borderRadius: 5,
       padding: 10,
-      alignItems: 'center', // アイテム内のコンテンツを中央に配置
   },
   image_text: {
 

@@ -20,9 +20,16 @@ export default function RootLayout() {
         options={({ route }) => ({
           
           title: (route.params as { name?: string })?.name || 'test',
-          // tabBarButton: () => null
+  
         })}
        />
+       <Stack.Screen 
+        name="/search_detail"
+        options={{
+          headerTitleAlign: 'center',
+          headerShown: true,
+        }}
+      />
     </Stack>
   );
 }
