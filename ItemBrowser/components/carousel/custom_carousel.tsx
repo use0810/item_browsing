@@ -1,7 +1,8 @@
 import React, { useRef, useEffect } from 'react';
-import { FlatList, View, StyleSheet, Image, Text, Dimensions } from 'react-native';
+import { FlatList, View, StyleSheet, Image, Text, Dimensions, TouchableOpacity } from 'react-native';
 
 import { DataType } from '../../data/home_carousel_data'; // データ構造のインポート
+import { router } from 'expo-router';
 
 type Props = {
   data: DataType[]; // 親から渡されるデータの型
@@ -30,6 +31,16 @@ export default function CustomCarousel({ data }: Props) {
     return () => clearInterval(interval); // コンポーネントがアンマウントされるときにタイマーをクリア
   }, [data]);
 
+  const handlePress = (item: DataType) => {
+      // 詳細ページにデータを渡して遷移
+      router.push({
+        pathname: '/search_detail',
+        params: {
+          data: JSON.stringify(item),
+        },
+      });
+    };
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -40,10 +51,10 @@ export default function CustomCarousel({ data }: Props) {
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item) => item.name}
         renderItem={({ item }) => (
-          <View style={styles.card}>
+          <TouchableOpacity style={styles.card} onPress={() => handlePress(item)}>
             <Image source={item.image} style={styles.image} />
             <Text style={styles.title}>{item.name}</Text>
-          </View>
+          </TouchableOpacity >
         )}
       />
     </View>

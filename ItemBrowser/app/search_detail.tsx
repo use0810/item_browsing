@@ -1,7 +1,18 @@
 import { Stack, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
-import UserFavoriteButtonWrapper from '../components/userDataManager/userFavoriteWrapper';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  KeyboardAvoidingView,
+  Platform,
+  Alert,
+} from 'react-native';
+import UserCartButton from '../components/user_cart_button';
+import UserFavoriteButton from '../components/user_favorite_button';
 
 const SearchDetail = () => {
   const { data } = useLocalSearchParams<{ data: string }>();
@@ -12,98 +23,118 @@ const SearchDetail = () => {
 
   const [quantity, setQuantity] = useState(1);
 
-  const handleIncrease = () => setQuantity(quantity + 1);
-  const handleDecrease = () => setQuantity(quantity > 1 ? quantity - 1 : 1);
+  const handleIncrease = () => {
+    if (quantity < 10) {
+      setQuantity(quantity + 1);
+    } else {
+      Alert.alert('エラー', '一度にカートに入る個数は10個までです。');
+    }
+  };
+
+  const handleDecrease = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
 
   const subtotal = parsedData.price * quantity;
 
   return (
     <>
       <Stack.Screen options={{ title: parsedData.name }} />
-      <ScrollView contentContainerStyle={styles.container}>
-        <View style={styles.imageAndPriceContainer}>
-          <Image source={parsedData.image} style={styles.image} />
-          <View style={styles.rightContainer}>
-            <View style={styles.nameContainer}>
-              <Text style={styles.name}>{parsedData.name}</Text>
-              <Text style={styles.volume}>30ml</Text>
-            </View>
-            <View style={styles.separator} />
-            <Text>価格</Text>
-            <View style={styles.quantityContainer}>
-              <Text style={styles.priceText}>¥{Number(parsedData.price).toLocaleString()}</Text>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={{ flex: 1 }}
+      >
+        <ScrollView contentContainerStyle={styles.container}>
+          {/* 1行目: タイトル */}
+          <View style={styles.titleContainer}>
+            <Text style={styles.titleText}>{parsedData.name}</Text>
+          </View>
+
+          <View style={styles.separator} />
+
+          {/* 2行目: 画像 */}
+          <View style={styles.imageContainer}>
+            <Image source={parsedData.image} style={styles.image} />
+          </View>
+
+          <View style={styles.sellContainer}>
+            {/* 3行目: "価格" */}
+            <Text style={styles.labelText}>Price</Text>
+            <View style={styles.priceAndQuantity}>
+              <Text style={styles.priceText}>
+                ¥{Number(parsedData.price).toLocaleString()}
+              </Text>
               <View style={styles.quantityBox}>
                 <TouchableOpacity style={styles.quantityButton} onPress={handleDecrease}>
                   <Text style={styles.quantityButtonText}>-</Text>
                 </TouchableOpacity>
-                <TextInput
-                  style={styles.quantityInput}
-                  value={String(quantity)}
-                  onChangeText={(text) => setQuantity(Number(text) || 1)}
-                  keyboardType="numeric"
-                />
+                <Text style={styles.quantityText}>{quantity}</Text>
                 <TouchableOpacity style={styles.quantityButton} onPress={handleIncrease}>
                   <Text style={styles.quantityButtonText}>+</Text>
                 </TouchableOpacity>
               </View>
             </View>
+
             <Text style={styles.subtotalText}>小計 ¥{subtotal.toLocaleString()}</Text>
+
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.purchaseButton}>
-                <Text style={styles.purchaseButtonText}>購入</Text>
-              </TouchableOpacity>
+              <UserCartButton itemId={parsedData.id} quantity={quantity} />
               <View style={styles.favoriteButtonContainer}>
-                <UserFavoriteButtonWrapper itemId={parsedData.id} />
+                <UserFavoriteButton itemId={parsedData.id} />
               </View>
             </View>
           </View>
-        </View>
-        <View style={styles.textContainer}>
-          <Text style={styles.textFirst}>{firstLetter}</Text>
-          <View style={styles.textRestContainer}>
-            <Text style={styles.textTitle}>{restOfText}</Text>
-            <Text style={styles.text}>{parsedData.desc}</Text>
+
+          <View style={styles.separator} />
+
+          <View style={styles.textContainer}>
+            <Text style={styles.textFirst}>{firstLetter}</Text>
+            <View style={styles.textRestContainer}>
+              <Text style={styles.textTitle}>{restOfText}</Text>
+              <Text style={styles.text}>{parsedData.desc}</Text>
+            </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1, // スクロール可能な内容を全体に広げる
+    paddingBottom: 20, // 下部の余白を追加
     backgroundColor: '#fff',
   },
-  imageAndPriceContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+  titleContainer: {
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+  },
+  titleText: {
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  imageContainer: {
+    width: '100%',
+    height: 300,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   image: {
-    width: '40%',
-    height: 300,
-    resizeMode: 'contain',
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
   },
-  rightContainer: {
-    width: '40%',
-    justifyContent: 'flex-start',
+  sellContainer: {
+    margin: 20,
   },
-  nameContainer: {
+  labelText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  priceAndQuantity: {
     flexDirection: 'row',
-    alignItems: 'baseline',
-  },
-  name: {
-    fontSize: 30,
-  },
-  volume: {
-    fontSize: 12,
-    color: '#666',
-    marginLeft: 5,
   },
   separator: {
     height: 1,
@@ -114,11 +145,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginRight: 10,
-  },
-  quantityContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
   },
   quantityBox: {
     flexDirection: 'row',
@@ -137,13 +163,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  quantityInput: {
-    width: 40,
-    textAlign: 'center',
+  quantityText: {
     fontSize: 16,
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
-    borderColor: '#ccc',
+    paddingHorizontal: 20,
   },
   subtotalText: {
     fontSize: 18,
@@ -152,44 +174,32 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    marginTop: 20,
     justifyContent: 'space-between',
-  },
-  purchaseButton: {
-    flex: 1,
-    paddingVertical: 12,
-    backgroundColor: '#ff5733',
     alignItems: 'center',
-    borderRadius: 5,
-  },
-  purchaseButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
+    marginTop: 20,
+    paddingHorizontal: 30,
   },
   favoriteButtonContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 10,
+    paddingLeft: 10,
   },
   textContainer: {
-    flex: 1,
     flexDirection: 'row',
     marginHorizontal: 20,
     marginTop: 10,
   },
   textFirst: {
     fontSize: 80,
-    marginRight: 10
+    marginRight: 10,
   },
-  textRestContainer:{
-    flex:1
+  textRestContainer: {
+    flex: 1,
   },
   textTitle: {
     fontSize: 25,
   },
-  text: {
-  }
+  text: {},
 });
 
 export default SearchDetail;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import AllData , { DataType }from '../data/all_data';
 import { router } from 'expo-router';
-import UserFavoriteButtonWrapper from '../components/userDataManager/userFavoriteWrapper';
+import UserFavoriteButton from '../components/user_favorite_button';
 
 const categories = ['オードパルファム', 'パルファム', 'オードトワレ', 'オーデコロン'];
 
@@ -65,18 +65,22 @@ const SearchWindow = () => {
         keyExtractor={item => item.id.toString()}
       
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => handlePress(item)}>
-            <View style={styles.itemContainer}>
+          <View style={styles.itemContainer}>
+            <TouchableOpacity onPress={() => handlePress(item)} style={styles.imageContainer}>
               <Image source={item.image} style={styles.image} />
-              <View style={styles.textContainer}>
+            </TouchableOpacity>
+            <View style={styles.textContainer}>
+              <TouchableOpacity onPress={() => handlePress(item)}>
                 <Text style={styles.itemName}>{item.name}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handlePress(item)}>
                 <Text style={styles.itemDesc}>{item.desc}</Text>
-                <View style={styles.favoriteButton}>
-                  <UserFavoriteButtonWrapper itemId={item.id} />
-                </View>
+              </TouchableOpacity>
+              <View style={styles.favoriteButton}>
+                <UserFavoriteButton itemId={item.id} />
               </View>
             </View>
-          </TouchableOpacity>
+          </View>
         )}
       />
     </View>
@@ -123,11 +127,13 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
     flexDirection: "row",
   },
-  image: {
-    height: 200,
+  imageContainer: {
     width: '30%',
     margin: 10
-    
+  },
+  image: {
+    height: 200,
+    width: '100%'
   },
   textContainer: {
     width: '70%',
@@ -138,8 +144,10 @@ const styles = StyleSheet.create({
   },
   itemDesc: {
     color: '#555',
+    paddingRight: 20
   },
   favoriteButton: {
+    marginVertical: 20,
     marginRight: 60, // 余白を追加
     alignSelf: 'flex-end', // 右寄せ
   },
